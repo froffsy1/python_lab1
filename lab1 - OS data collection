@@ -1,0 +1,46 @@
+import datetime
+import json
+import os
+import platform
+import sys
+
+def os_info():
+    info={
+        'System': platform.system(),
+        'Version': platform.version(),
+        'Release': platform.release(),
+        'Architecture': platform.machine(),
+        'Hostname': platform.node(),
+    }
+
+    return info
+
+def user_info():
+    try:
+        username = os.getlogin()
+    except Exception:
+        username = None
+
+    return {
+        'Username': username,
+        'Direct': os.getcwd(),
+        'Python_version': sys.version,
+    }
+
+def oser_info():
+    return {
+        'CPU_core': os.cpu_count(),
+        'Time': datetime.datetime.now().isoformat(),
+    }
+
+if __name__ == '__main__':
+    result={
+        'os_info': os_info(),
+        'user_info': user_info(),
+        'oser_info': oser_info(),
+    }
+
+    print(json.dumps(result, indent=4,ensure_ascii=False))
+
+    with open('system_info.json','w',encoding='utf-8') as f:
+        json.dump(result,f,indent=4,ensure_ascii=False)
